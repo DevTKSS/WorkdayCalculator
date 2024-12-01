@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using WinRT.Interop;
 
+///Copy from WinUI 3 Galley App Repo with adjusted Project Namespace
 namespace WorkdayCalculator.Helpers
 {
     // Helper class to allow the app to find the Window that contains an
@@ -27,7 +28,7 @@ namespace WorkdayCalculator.Helpers
     // windows.  In the future, we would like to support this in platform APIs.
     public class WindowHelper
     {
-        static public Window CreateWindow()
+        public static Window CreateWindow()
         {
             Window newWindow = new Window
             {
@@ -37,7 +38,7 @@ namespace WorkdayCalculator.Helpers
             return newWindow;
         }
 
-        static public void TrackWindow(Window window)
+        public static void TrackWindow(Window window)
         {
             window.Closed += (sender,args) => {
                 _activeWindows.Remove(window);
@@ -45,14 +46,14 @@ namespace WorkdayCalculator.Helpers
             _activeWindows.Add(window);
         }
 
-        static public AppWindow GetAppWindow(Window window)
+        public static AppWindow GetAppWindow(Window window)
         {
             IntPtr hWnd = WindowNative.GetWindowHandle(window);
             WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
             return AppWindow.GetFromWindowId(wndId);
         }
 
-        static public Window GetWindowForElement(UIElement element)
+        public static Window GetWindowForElement(UIElement element)
         {
             if (element.XamlRoot != null)
             {
@@ -67,7 +68,7 @@ namespace WorkdayCalculator.Helpers
             return null;
         }
         // get dpi for an element
-        static public double GetRasterizationScaleForElement(UIElement element)
+        public static double GetRasterizationScaleForElement(UIElement element)
         {
             if (element.XamlRoot != null)
             {
@@ -82,11 +83,11 @@ namespace WorkdayCalculator.Helpers
             return 0.0;
         }
 
-        static public List<Window> ActiveWindows { get { return _activeWindows; }}
+        public static List<Window> ActiveWindows { get { return _activeWindows; }}
 
-        static private List<Window> _activeWindows = new List<Window>();
+        private static List<Window> _activeWindows = new List<Window>();
 
-        static public StorageFolder GetAppLocalFolder()
+        public static StorageFolder GetAppLocalFolder()
         {
             StorageFolder localFolder;
             if (!NativeHelper.IsAppPackaged)

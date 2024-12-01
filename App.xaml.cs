@@ -1,17 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.Windows.AppLifecycle;
-using Windows.ApplicationModel.Activation;
-using Windows.System;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using WorkdayCalculator.Navigation;
+﻿using Microsoft.UI.Xaml;
 using WorkdayCalculator.Views;
+using WorkdayCalculator.NavigationViews;
+using WorkdayCalculator.Helpers;
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -44,15 +35,26 @@ public partial class App : Application
         startupWindow.Activate();
 
     }
-    // C# code to create a new window
-    var newWindow = WindowHelper.CreateWindow();
-    var rootPage = new NavigationRootPage();
-    rootPage.RequestedTheme = ThemeHelper.RootTheme;
-    newWindow.Content = rootPage;
-    newWindow.Activate();
 
-// C# code to navigate in the new window
-var targetPageType = typeof(HomePage);
-    string targetPageArguments = string.Empty;
-    rootPage.Navigate(targetPageType, targetPageArguments);
+    /// Code copy-pasted from the WinUI 3 Windowing sample
+    
+    /// <summary>
+    /// Creates a new Window instance for the application.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void createNewWindow_Click(object sender, RoutedEventArgs e)
+    {
+        // C# code to create a new window
+        var newWindow = WindowHelper.CreateWindow();
+        var rootPage = new NavigationRootPage();
+        rootPage.RequestedTheme = ThemeHelper.RootTheme;
+        newWindow.Content = rootPage;
+        newWindow.Activate();
+
+        // C# code to navigate in the new window
+        var targetPageType = typeof(HomePage);
+        string targetPageArguments = string.Empty;
+        rootPage.Navigate(targetPageType, targetPageArguments);
+    }
 }

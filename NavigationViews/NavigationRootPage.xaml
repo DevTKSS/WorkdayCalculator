@@ -10,6 +10,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Frame x:Name="ContentFrame" />
+        <NavigationView x:Name="NavView"
+                        MenuItemTemplateSelector="{StaticResource selector}"
+                        MenuItemsSource="{x:Bind Cathegories, Mode=OneWay}"/>
+        <local:MenuItemTemplateSelector x:Key="selector">
+            <local:MenuItemTemplateSelector.ItemTemplate>
+                <DataTemplate x:DataType="local:Cathegory">
+                    <NavigationViewItem Content="{x:Bind Title}" ToolTipService.ToolTip="{x:Bind Tooltip}">
+                        <NavigationViewItem.Icon>
+                            <SymbolIcon Symbol="{x:Bind Glyph}" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                </DataTemplate>
+            </local:MenuItemTemplateSelector.ItemTemplate>
+        </local:MenuItemTemplateSelector>
     </Grid>
 </Page>
