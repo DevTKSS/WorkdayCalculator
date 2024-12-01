@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WorkdayCalculator (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WorkdayCalculator (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
