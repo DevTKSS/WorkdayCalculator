@@ -73,11 +73,11 @@ public sealed partial class VacationPage : Page
             get; set;
         }
         public string Name { get; set; } = string.Empty;
-        public string StartDate
+        public string? StartDate
         {
             get; set;
         }
-        public string EndDate
+        public string? EndDate
         {
             get; set;
         }

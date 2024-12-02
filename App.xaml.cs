@@ -2,6 +2,7 @@
 using WorkdayCalculator.Views;
 using WorkdayCalculator.Helpers;
 using Microsoft.UI.Xaml.Controls;
+using WorkdayCalculator.Common;
 using System;
 using Windows.ApplicationModel.Activation;
 using Microsoft.UI.Xaml.Navigation;
@@ -48,7 +49,7 @@ public partial class App : Application
 
     private async void EnsureWindow(IActivatedEventArgs? args = null)
     {
-        _ = GetRootFrame();
+        Frame rootFrame = GetRootFrame();
         Type targetPageType = typeof(HomePage);
         string targetPageArguments = string.Empty;
 

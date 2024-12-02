@@ -1,22 +1,9 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Xml.Linq;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Markup;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using WorkdayCalculator.Helpers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,22 +15,19 @@ namespace WorkdayCalculator.Views;
 public sealed partial class NavigationViewPage : Page
 {
     private string _namespace => "WorkdayCalculator.Views.";
-    public ObservableCollection<CategoryBase> Categories
-    {
-        get; set;
-    }
-    public ObservableCollection<CategoryBase> FooterNavItems
-    {
-        get; set;
-    }
+    public ObservableCollection<CategoryBase> Categories {get; set;}
+    public ObservableCollection<CategoryBase> FooterNavItems {get; set;}
+
     public Microsoft.UI.Xaml.Controls.NavigationView NavigationView => NavigationViewControl;
 
     public NavigationViewPage()
     {
         this.InitializeComponent();
-        //NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().First();
+        NavigationViewControl.SelectedItem = NavigationViewControl.MenuItems.OfType<NavigationViewItem>().First();
 
         Categories = new ObservableCollection<CategoryBase>();
+        FooterNavItems = new ObservableCollection<CategoryBase>();
+        
         Category firstCategory = new Category { Name = "Home", Glyph = Symbol.Home, Tooltip = "Go Home", internalName = "HomePage" };
         Categories.Add(firstCategory);
 
@@ -52,7 +36,7 @@ public sealed partial class NavigationViewPage : Page
         Categories.Add(new Category { Name = "My Vacationdays", Glyph = Symbol.MapPin, Tooltip = "Add your Vacationdays", internalName = "VacationPage" });
         NavigationViewControl.SelectedItem = firstCategory;
 
-        FooterNavItems = new ObservableCollection<CategoryBase>();
+        
         FooterNavItems.Add(new Category { Name = "Settings", Glyph = Symbol.Keyboard, Tooltip = "This is Settings category", internalName = "SettingsPage" });
     }
 
@@ -107,40 +91,8 @@ public sealed partial class NavigationViewPage : Page
         Parameter = parameter;
     }
 }
-[ContentProperty(Name = "ItemTemplate")]
-class MenuItemTemplateSelector : DataTemplateSelector
-{
-    public DataTemplate? ItemTemplate {get ; set;}
-          
-    
-    protected override DataTemplate? SelectTemplateCore(object item)
-    {
-        return ItemTemplate; //return item is Separator ? SeparatorTemplate : item is Header ? HeaderTemplate : ItemTemplate;
-    }
-}
-public class CategoryBase
-    {
-    }
 
-    public class Category : CategoryBase
-    {
-        public string Name {get; set;} = string.Empty;
-    
-        public required string internalName {get ; set;}
-    
-        public string Tooltip { get; set;} = string.Empty;
-        
-        public Symbol Glyph {get; set;}
-    }
 
-    public class Separator : CategoryBase
-    {
-    }
-
-    public class Header : CategoryBase
-    {
-        public string Name { get; set; } = string.Empty;
-    }
 
 // var selectedItem = (Category)args.SelectedItem;
 // string selectedItemTag = selectedItem.Name;
