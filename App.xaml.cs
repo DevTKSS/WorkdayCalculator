@@ -106,7 +106,7 @@ public partial class App : Application
         if (rootPage == null)
         {
             rootPage = new NavigationViewPage();
-            rootFrame = (Frame)rootPage.FindName("contentFrame");
+            rootFrame = (Frame)rootPage.FindName("rootFrame");
             if (rootFrame == null)
             {
                 throw new Exception("Root frame not found");
@@ -118,7 +118,7 @@ public partial class App : Application
         }
         else
         {
-            rootFrame = (Frame)rootPage.FindName("contentFrame");
+            rootFrame = (Frame)rootPage.FindName("rootFrame");
         }
         return rootFrame;
     }
