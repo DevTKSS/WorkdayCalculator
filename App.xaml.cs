@@ -1,11 +1,11 @@
 ﻿using Microsoft.UI.Xaml;
 using WorkdayCalculator.Views;
-using WorkdayCalculator.NavigationViews;
 using WorkdayCalculator.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using Windows.ApplicationModel.Activation;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,35 +33,96 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs e)
     {
-        MainWindow = new Window();
-
-        if (MainWindow.Content is not Frame rootFrame)
-        {
-            // Create a Frame to act as the navigation context and navigate to the first page.
-            rootFrame = new Frame();
-            rootFrame.NavigationFailed += OnNavigationFailed;
-
-            // Place the frame in the current Window.
-            MainWindow.Content = rootFrame;
-        }
-    
-        if(rootFrame.Content == null)
-        {
-            // When the navigation stack isn't restored navigate to the first page,
-            // configuring the new page by passing required information as a navigation
-            // parameter
-            rootFrame.Navigate(typeof(NavigationRootPage), e.Arguments);
-        }
-
+        MainWindow = WindowHelper.CreateWindow();
         MainWindow.ExtendsContentIntoTitleBar = true;
-        MainWindow.Activate();
 
+        SizeInt32 size = new SizeInt32(500, 500);
+        MainWindow.AppWindow.Resize(size);
+        EnsureWindow();
     }
 
     private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
     {
         throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
     }
+
+    private async void EnsureWindow(IActivatedEventArgs? args = null)
+    {
+        _ = GetRootFrame();
+        Type targetPageType = typeof(HomePage);
+        string targetPageArguments = string.Empty;
+
+        if (args != null)
+        {
+            if (args.Kind == ActivationKind.Launch)
+            {
+                targetPageArguments = ((Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)args).Arguments;
+            }
+        }
+        var eventargs = Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().GetActivatedEventArgs();
+        if (eventargs != null && eventargs.Kind is Microsoft.Windows.AppLifecycle.ExtendedActivationKind.Protocol && eventargs.Data is ProtocolActivatedEventArgs)
+        {
+            ProtocolActivatedEventArgs ProtocolArgs = (ProtocolActivatedEventArgs)eventargs.Data;
+            var uri = ProtocolArgs.Uri.LocalPath.Replace("/", "");
+
+            targetPageArguments = uri;
+            //string targetId = string.Empty;
+            //if (uri == "AllControls")
+            //{
+            //    {
+            //        targetPageType = typeof(AllControlsPage);
+            //    }
+            //    else if (uri == "NewControls")
+            //    {
+            //        targetPageType = typeof(HomePage);
+            //    }
+            //    else if (ControlInfoDataSource.Instance.Groups.Any(g => g.UniqueId == uri))
+            //    {
+            //        targetPageType = typeof(SectionPage);
+            //    }
+            //    else if (ControlInfoDataSource.Instance.Groups.Any(g => g.Items.Any(i => i.UniqueId == uri)))
+            //    {
+            //        targetPageType = typeof(ItemPage);
+            //    }
+            //}
+        }
+
+        NavigationViewPage rootPage = (NavigationViewPage)MainWindow!.Content as NavigationViewPage;
+        rootPage.Navigate(targetPageType, targetPageArguments);
+
+        if (targetPageType == typeof(HomePage))
+        {
+            ((Microsoft.UI.Xaml.Controls.NavigationViewItem)((NavigationViewPage)App.MainWindow.Content).NavigationView.MenuItems[0]).IsSelected = true;
+        }
+
+        MainWindow.Activate();
+    }
+
+    private Frame GetRootFrame()
+    {
+        Frame rootFrame;
+        NavigationViewPage? rootPage = MainWindow!.Content as NavigationViewPage;
+        if (rootPage == null)
+        {
+            rootPage = new NavigationViewPage();
+            rootFrame = (Frame)rootPage.FindName("contentFrame");
+            if (rootFrame == null)
+            {
+                throw new Exception("Root frame not found");
+            }
+            rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+            rootFrame.NavigationFailed += OnNavigationFailed;
+
+            MainWindow.Content = rootPage;
+        }
+        else
+        {
+            rootFrame = (Frame)rootPage.FindName("contentFrame");
+        }
+        return rootFrame;
+    }
+    
+}
     ///// Code copy-pasted from the WinUI 3 Windowing sample
 
     ///// <summary>
@@ -84,4 +145,4 @@ public partial class App : Application
     //    rootPage.Navigate(targetPageType, targetPageArguments);
     //}
 
-}
+

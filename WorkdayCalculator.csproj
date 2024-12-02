@@ -21,7 +21,10 @@
   <ItemGroup>
     <None Remove="MainWindow.xaml" />
     <None Remove="Views\HomePage.xaml" />
+    <None Remove="Views\NavigationViewPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
+    <None Remove="Views\VacationPage.xaml" />
+    <None Remove="Views\WorkdaysPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\HomePage.xaml">
@@ -86,7 +88,24 @@
     <PRIResource Remove="Navigation\**" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MainWindow.xaml">
+    <Compile Remove="Helpers\ThemeHelper.cs" />
+    <Compile Remove="MainWindow.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="MainWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\VacationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WorkdaysPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\NavigationViewPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

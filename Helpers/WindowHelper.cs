@@ -39,9 +39,8 @@ public class WindowHelper
 
     public static void TrackWindow(Window window)
     {
-        window.Closed += (sender,args) => {
-            _activeWindows.Remove(window);
-        };
+        window.Closed += (sender,args) =>  _activeWindows.Remove(window);
+                   
         _activeWindows.Add(window);
     }
 
@@ -87,13 +86,7 @@ public class WindowHelper
         return 0.0;
     }
 
-    public static List<Window> ActiveWindows 
-    {
-        get
-        {
-            return _activeWindows; 
-        }
-    }
+    public static List<Window> ActiveWindows => _activeWindows;
 
     private static readonly List<Window> _activeWindows = new List<Window>();
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="WorkdayCalculator.Views.NavigationViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WorkdayCalculator.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <DataTemplate x:Key="selector">
+            <NavigationViewItem>
+                <DataTemplate x:DataType="local:Category">
+                    <NavigationViewItem Content="{x:Bind Title}" ToolTipService.ToolTip="{x:Bind Tooltip}" Tag="{x:Bind internalName}">
+                        <NavigationViewItem.Icon>
+                            <SymbolIcon Symbol="{x:Bind Glyph}" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                </DataTemplate>
+            </NavigationViewItem>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <NavigationView x:Name="NavigationViewControl"
+        MenuItemTemplateSelector="{StaticResource selector}"<!--failed to assign to property-->
+        MenuItemsSource="{x:Bind Categories, Mode=OneWay}"
+        IsTabStop="False" SelectionChanged="NavigationView_SelectionChanged"
+        FooterMenuItemsSource="{x:Bind FooterNavItems, Mode=OneWay}"/>
+        <StackPanel>
+            <Frame Margin="0,0,0,0" x:Name="contentFrame"/>
+        </StackPanel>
+    </Grid>
+</Page>
