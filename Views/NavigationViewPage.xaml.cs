@@ -44,16 +44,16 @@ public sealed partial class NavigationViewPage : Page
         //NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().First();
 
         Categories = new ObservableCollection<CategoryBase>();
-        Category firstCategory = new Category { Title = "Home", Glyph = Symbol.Home, Tooltip = "Go Home", internalName = "HomePage" };
+        Category firstCategory = new Category { Name = "Home", Glyph = Symbol.Home, Tooltip = "Go Home", internalName = "HomePage" };
         Categories.Add(firstCategory);
 
 
-        Categories.Add(new Category { Title = "My Worktimes", Glyph = Symbol.Calendar, Tooltip = "Add Worktimes", internalName = "WorktimesPage" });
-        Categories.Add(new Category { Title = "My Vacationdays", Glyph = Symbol.MapPin, Tooltip = "Add your Vacationdays", internalName = "VacationPage" });
+        Categories.Add(new Category { Name = "My Worktimes", Glyph = Symbol.Calendar, Tooltip = "Add Worktimes", internalName = "WorktimesPage" });
+        Categories.Add(new Category { Name = "My Vacationdays", Glyph = Symbol.MapPin, Tooltip = "Add your Vacationdays", internalName = "VacationPage" });
         NavigationViewControl.SelectedItem = firstCategory;
 
         FooterNavItems = new ObservableCollection<CategoryBase>();
-        FooterNavItems.Add(new Category { Title = "Settings", Glyph = Symbol.Keyboard, Tooltip = "This is Settings category", internalName = "SettingsPage" });
+        FooterNavItems.Add(new Category { Name = "Settings", Glyph = Symbol.Keyboard, Tooltip = "This is Settings category", internalName = "SettingsPage" });
     }
 
     public NavigationViewPaneDisplayMode ChoosePanePosition(bool toggleOn)
@@ -72,7 +72,7 @@ public sealed partial class NavigationViewPage : Page
     {
         if (args.IsSettingsSelected)
         {
-            contentFrame.Navigate(typeof(SettingsPage));
+            rootFrame.Navigate(typeof(SettingsPage));
         }
         else
         {
@@ -80,10 +80,10 @@ public sealed partial class NavigationViewPage : Page
 
             var selectedItem = (Category)args.SelectedItem;
             // string selectedItemTag = selectedItem.internalName;
-            sender.Header = selectedItem.Title;
+            sender.Header = selectedItem.Name;
             string pageName = $"{_namespace}{selectedItem.internalName}";
             Type pageType = Type.GetType(pageName) ?? throw new InvalidOperationException($"Type '{pageName}' not found.");
-            contentFrame.Navigate(pageType);
+            rootFrame.Navigate(pageType);
         }
     }
 
@@ -92,41 +92,39 @@ public sealed partial class NavigationViewPage : Page
         object? targetPageArguments = null,
         Microsoft.UI.Xaml.Media.Animation.NavigationTransitionInfo? navigationTransitionInfo = null)
     {
-        NavigationRootPageArgs args = new NavigationRootPageArgs
-        {
-            NavigationViewPage = this,
-            Parameter = targetPageArguments
-        };
+        NavigationViewPageArgs args = new NavigationViewPageArgs(this,targetPageArguments);
 
-        contentFrame.Navigate(pageType, targetPageArguments, navigationTransitionInfo);
+        rootFrame.Navigate(pageType, args, navigationTransitionInfo);
     }
-
-    public class NavigationRootPageArgs
-    {
-        public required NavigationViewPage NavigationViewPage;
-        public object? Parameter;
-    }
-    // // [ContentProperty(Name = "ItemTemplate")]
-    //private class MenuItemTemplateSelector : DataTemplateSelector
-    // {
-    //     public DataTemplate ItemTemplate
-    //     {
-    //         get; set;
-    //     }
-    //     protected override DataTemplate SelectTemplateCore(object item)
-    //     {
-    //         return item is Separator ? SeparatorTemplate : item is Header ? HeaderTemplate : ItemTemplate;
-    //     }
-
 }
-    // }
-    public class CategoryBase
+ public class NavigationViewPageArgs
+ {
+    public NavigationViewPage NavigationViewPage;
+    public object? Parameter;
+    public NavigationViewPageArgs(NavigationViewPage navigationViewPage, object? parameter)
+    {
+        NavigationViewPage = navigationViewPage;
+        Parameter = parameter;
+    }
+}
+[ContentProperty(Name = "ItemTemplate")]
+class MenuItemTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? ItemTemplate {get ; set;}
+          
+    
+    protected override DataTemplate? SelectTemplateCore(object item)
+    {
+        return ItemTemplate; //return item is Separator ? SeparatorTemplate : item is Header ? HeaderTemplate : ItemTemplate;
+    }
+}
+public class CategoryBase
     {
     }
 
     public class Category : CategoryBase
     {
-        public string Title {get; set;} = string.Empty;
+        public string Name {get; set;} = string.Empty;
     
         public required string internalName {get ; set;}
     

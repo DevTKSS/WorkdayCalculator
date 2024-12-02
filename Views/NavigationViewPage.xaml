@@ -10,26 +10,29 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Key="selector">
-            <NavigationViewItem>
+        <local:MenuItemTemplateSelector x:Key="selector">
+           <local:MenuItemTemplateSelector.ItemTemplate>
                 <DataTemplate x:DataType="local:Category">
-                    <NavigationViewItem Content="{x:Bind Title}" ToolTipService.ToolTip="{x:Bind Tooltip}" Tag="{x:Bind internalName}">
+                    <NavigationViewItem 
+                                Content="{x:Bind Name}"
+                                ToolTipService.ToolTip="{x:Bind Tooltip}" 
+                                Tag="{x:Bind internalName}">
                         <NavigationViewItem.Icon>
                             <SymbolIcon Symbol="{x:Bind Glyph}" />
                         </NavigationViewItem.Icon>
                     </NavigationViewItem>
                 </DataTemplate>
-            </NavigationViewItem>
-        </DataTemplate>
+            </local:MenuItemTemplateSelector.ItemTemplate>
+        </local:MenuItemTemplateSelector>
     </Page.Resources>
     <Grid>
         <NavigationView x:Name="NavigationViewControl"
-        MenuItemTemplateSelector="{StaticResource selector}"<!--failed to assign to property-->
-        MenuItemsSource="{x:Bind Categories, Mode=OneWay}"
-        IsTabStop="False" SelectionChanged="NavigationView_SelectionChanged"
-        FooterMenuItemsSource="{x:Bind FooterNavItems, Mode=OneWay}"/>
+                        MenuItemTemplate="{StaticResource selector}"
+                        MenuItemsSource="{x:Bind Categories, Mode=OneWay}"
+                        IsTabStop="False" SelectionChanged="NavigationView_SelectionChanged"
+                        FooterMenuItemsSource="{x:Bind FooterNavItems, Mode=OneWay}"/>
         <StackPanel>
-            <Frame Margin="0,0,0,0" x:Name="contentFrame"/>
+            <Frame Margin="0,0,0,0" x:Name="rootFrame"/>
         </StackPanel>
     </Grid>
 </Page>
